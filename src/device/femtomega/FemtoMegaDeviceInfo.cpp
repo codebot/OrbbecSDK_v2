@@ -80,6 +80,7 @@ std::shared_ptr<IDevice> FemtoMegaDeviceInfo::createDevice() const {
 
 std::vector<std::shared_ptr<IDeviceEnumInfo>> FemtoMegaDeviceInfo::pickDevices(const SourcePortInfoList infoList) {
     std::vector<std::shared_ptr<IDeviceEnumInfo>> femtoMegaDeviceInfos;
+#if defined(BUILD_USB_PAL)
     auto                                          remainder = FilterUSBPortInfoByPid(infoList, FemtoMegaDevPids);
     auto                                          groups    = utils::groupVector<std::shared_ptr<const SourcePortInfo>>(remainder, GroupUSBSourcePortByUrl);
     auto                                          iter      = groups.begin();
@@ -90,7 +91,9 @@ std::vector<std::shared_ptr<IDeviceEnumInfo>> FemtoMegaDeviceInfo::pickDevices(c
         }
         iter++;
     }
-
+#else
+    (void)infoList;
+#endif
     return femtoMegaDeviceInfos;
 }
 

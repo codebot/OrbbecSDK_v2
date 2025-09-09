@@ -90,6 +90,7 @@ std::shared_ptr<IDevice> G2DeviceInfo::createDevice() const {
 
 std::vector<std::shared_ptr<IDeviceEnumInfo>> G2DeviceInfo::pickDevices(const SourcePortInfoList infoList) {
     std::vector<std::shared_ptr<IDeviceEnumInfo>> G2DeviceInfos;
+#if defined(BUILD_USB_PAL)
     auto                                          remainder = FilterUSBPortInfoByPid(infoList, Gemini2DevPids);
     auto                                          groups    = utils::groupVector<std::shared_ptr<const SourcePortInfo>>(remainder, GroupUSBSourcePortByUrl);
     auto                                          iter      = groups.begin();
@@ -100,7 +101,9 @@ std::vector<std::shared_ptr<IDeviceEnumInfo>> G2DeviceInfo::pickDevices(const So
         }
         iter++;
     }
-
+#else
+    (void)infoList;
+#endif
     return G2DeviceInfos;
 }
 

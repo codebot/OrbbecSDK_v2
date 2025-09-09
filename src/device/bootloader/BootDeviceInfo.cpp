@@ -54,6 +54,7 @@ std::shared_ptr<IDevice> BootDeviceInfo::createDevice() const {
 
 std::vector<std::shared_ptr<IDeviceEnumInfo>> BootDeviceInfo::pickDevices(const SourcePortInfoList infoList) {
     std::vector<std::shared_ptr<IDeviceEnumInfo>> BootDeviceInfos;
+#if defined(BUILD_USB_PAL)
     auto                                          remainder = FilterUSBPortInfoByPid(infoList, BootDevPids);
     auto                                          groups    = utils::groupVector<std::shared_ptr<const SourcePortInfo>>(remainder, GroupUSBSourcePortByUrl);
     auto                                          iter      = groups.begin();
@@ -64,7 +65,9 @@ std::vector<std::shared_ptr<IDeviceEnumInfo>> BootDeviceInfo::pickDevices(const 
         }
         iter++;
     }
-
+#else
+    (void)infoList;
+#endif
     return BootDeviceInfos;
 }
 

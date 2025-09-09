@@ -81,12 +81,17 @@ std::shared_ptr<ISourcePort> Platform::getUvcSourcePort(std::shared_ptr<const So
         throw pal_exception("Usb pal is not exist, please check the build config that you have enabled BUILD_USB_PAL");
     }
     std::shared_ptr<ISourcePort> sourcePort;
+#if defined(BUILD_USB_PAL)
 #if defined(__ANDROID__)
     auto usbPal = std::dynamic_pointer_cast<AndroidUsbPal>(pal->second);
     sourcePort = usbPal->getUvcSourcePort(portInfo, backendTypeHint);
 #else
     auto usbPal = std::dynamic_pointer_cast<LinuxUsbPal>(pal->second);
     sourcePort = usbPal->getUvcSourcePort(portInfo, backendTypeHint);
+#endif
+#else
+    (void)portInfo;
+    (void)backendTypeHint;
 #endif
     return sourcePort;
 }
@@ -96,12 +101,16 @@ void Platform::setUvcBackendType(OBUvcBackendType backendType) {
     if(pal == palMap_.end()) {
         throw pal_exception("Usb pal is not exist, please check the build config that you have enabled BUILD_USB_PAL");
     }
+#if defined(BUILD_USB_PAL)
 #if defined(__ANDROID__)
     auto androidUsbPal = std::dynamic_pointer_cast<AndroidUsbPal>(pal->second);
     androidUsbPal->setUvcBackendType(backendType);
 #else
     auto linuxUsbPal = std::dynamic_pointer_cast<LinuxUsbPal>(pal->second);
     linuxUsbPal->setUvcBackendType(backendType);
+#endif
+#else
+    (void)backendType;
 #endif
 }
 #endif

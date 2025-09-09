@@ -85,7 +85,7 @@ std::shared_ptr<IDevice> G330DeviceInfo::createDevice() const {
 
 std::vector<std::shared_ptr<IDeviceEnumInfo>> G330DeviceInfo::pickDevices(const SourcePortInfoList infoList) {
     std::vector<std::shared_ptr<IDeviceEnumInfo>> G330DeviceInfos;
-
+#if defined(BUILD_USB_PAL)
     // pick usb device
     auto remainder = FilterUSBPortInfoByPid(infoList, G330DevPids);
     auto groups    = utils::groupVector<std::shared_ptr<const SourcePortInfo>>(remainder, GroupUSBSourcePortByUrl);
@@ -97,6 +97,9 @@ std::vector<std::shared_ptr<IDeviceEnumInfo>> G330DeviceInfo::pickDevices(const 
         }
         iter++;
     }
+#else
+    (void)infoList;
+#endif
     return G330DeviceInfos;
 }
 
