@@ -81,7 +81,10 @@ if(OB_IS_MAIN_PROJECT)
         PATTERN "*.hpp"
     )
 
-    install(EXPORT OrbbecSDKConfig NAMESPACE ob:: DESTINATION lib)
+    install(
+        EXPORT OrbbecSDKConfig
+        NAMESPACE ob::
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/OrbbecSDK)
 endif()
 
 if(OB_BUILD_SOVERSION)
