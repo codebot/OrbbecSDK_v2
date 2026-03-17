@@ -87,7 +87,11 @@ if(OB_IS_MAIN_PROJECT)
         PATTERN "*.hpp"
     )
 
-    install(EXPORT ${OB_SDK_LIB_NAME}Config NAMESPACE ob:: DESTINATION lib)
+    install(
+        EXPORT ${OB_SDK_LIB_NAME}Config
+        NAMESPACE ob::
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${OB_SDK_LIB_NAME}
+    )
 
     include(CMakePackageConfigHelpers)
     write_basic_package_version_file(
